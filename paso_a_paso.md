@@ -25,7 +25,7 @@ http://localhost:5000/api/pagos/realizar
 POST
 + TOKEN
 {
-  "cita_id": 6,
+  "cita_id": 10,
   "monto": 45000
 }
 

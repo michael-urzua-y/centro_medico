@@ -1,6 +1,7 @@
 import pytest
-from app import create_app,  db
+from app import create_app
 from app.models import Cita, Usuario
+from datetime import datetime, timedelta, UTC
 
 @pytest.fixture
 def client():
@@ -25,8 +26,31 @@ def test_rechazar_cita_pendiente(client):
             'Content-Type': 'application/json',
             'Authorization': f'Bearer {token}'  # Envía el token hardcodeado
         })
-    
-    print(response.data)  # Para debug
-    
+       
     assert response.status_code == 200
     assert b'rechazada' in response.data.lower()
+
+
+
+def test_pedir_cita(client):
+    with client.application.app_context():
+        medico = Usuario.query.filter_by(rol="medico").first()
+        assert medico is not None, "No se encontró un médico en la base de datos"
+
+    token = "f6e56703f8e6b2d63e65fa2852029332"
+
+    data = {
+        "medico_id": medico.usuario_id,
+        "fecha": datetime.now(UTC).date().isoformat(),
+        "hora": (datetime.now(UTC) + timedelta(hours=2)).strftime("%H:%M")
+    }
+
+    response = client.post("/api/citas/pedir",
+                           json=data,
+                           headers={
+                               "Content-Type": "application/json",
+                               "Authorization": f"Bearer {token}"
+                           })
+    
+    assert response.status_code in [200, 201]
+    assert b'cita' in response.data.lower() or b'exito' in response.data.lower()
