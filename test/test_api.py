@@ -96,10 +96,10 @@ def test_confirmar_cita(client, nueva_cita):
                                "Authorization": f"Bearer {token}"
                            })
 
-#     assert response.status_code == 200
-#     json_response = response.get_json()
-#     assert json_response["mensaje"] == "Cita confirmada correctamente"
-#     assert json_response["cita_id"] == nueva_cita
+    assert response.status_code == 200
+    json_response = response.get_json()
+    assert json_response["mensaje"] == "Cita confirmada correctamente"
+    assert json_response["cita_id"] == nueva_cita
 
 
 # def test_rechazar_cita_pendiente(client, nueva_cita):

@@ -29,6 +29,7 @@ nosetests.xml
 coverage.xml
 *.cover
 *.py,cover
+.pytest_cache/
 
 # MyPy
 .mypy_cache/
@@ -56,3 +57,11 @@ build/
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Misc temporary or manual files
+*.zip
+*.bak
+*.tmp
+
+# Pylint cache (optional)
+.pylint.d/

@@ -3,11 +3,13 @@ from app import db
 from app.models import Cita, Pago
 from decimal import Decimal
 from app.utils.auth import token_required
+from dotenv import load_dotenv
 import stripe
 import os
 
-# Configuración de Stripe (usa variable de entorno en producción)
-stripe.api_key = os.getenv('STRIPE_SECRET_KEY', '...')
+
+load_dotenv() 
+stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
 pagos_bp = Blueprint('pagos', __name__, url_prefix='/api/pagos')
 

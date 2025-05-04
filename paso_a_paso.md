@@ -25,7 +25,7 @@ http://localhost:5000/api/pagos/realizar
 POST
 + TOKEN
 {
-  "cita_id": 11,
+  "cita_id": 1,
   "monto": 45000,
   "payment_method_id": "pm_card_visa"
 }
