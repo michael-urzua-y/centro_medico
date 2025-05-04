@@ -8,16 +8,16 @@ POST
    "password": "1234"
 }
 
-# f6e56703f8e6b2d63e65fa2852029332
+# 109b28908f59545545deea2497a90fd2
 
 ### PEDIR CITA
 http://127.0.0.1:5000/api/citas/pedir
 POST
 + TOKEN
 {
-  "medico_id": 4,
+  "medico_id": 2,
   "fecha": "2025-05-04",
-  "hora": "07:15"
+  "hora": "08:15"
 }
 
 ### PAGAR CITA
@@ -25,9 +25,13 @@ http://localhost:5000/api/pagos/realizar
 POST
 + TOKEN
 {
-  "cita_id": 10,
-  "monto": 45000
+  "cita_id": 11,
+  "monto": 45000,
+  "payment_method_id": "pm_card_visa"
 }
+
+### VERIFICAR PAGO
+GET http://localhost:5000/api/pagos/verificar/1
 
 ### MOSTRAR CITAS DEL PACIENTE
 GET http://localhost:5000/api/citas/paciente // TODAS LAS CITAS
@@ -41,7 +45,7 @@ POST http://localhost:5000/api/auth/login
   "password": "1234"
 }
 
-# 546ced30c991c506ebdbfb641941176a
+# 711cbcd0958b723d1163d10e6254823b
 
 ### LISTAR CITAS DEL MEDICO POR FECHA 
 GET http://localhost:5000/api/citas/dia?fecha=2025-05-01 // BUSCAR POR FECHA
@@ -54,7 +58,7 @@ POST
 + TOKEN
 
 {
-  "cita_id": 2
+  "cita_id": 11
 }
 
 ### RECHAZAR CITA MEDICA

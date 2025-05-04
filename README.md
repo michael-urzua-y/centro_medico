@@ -6,8 +6,10 @@ Esta es una API RESTful para la gestión de citas médicas desarrollada con **Py
 ## Tecnologías utilizadas
 
 - Python 3
-- Flask + Flask SQLAlchemy
+- Flask
+- Flask SQLAlchemy
 - PostgreSQL
+- pytest
 - Postman (para pruebas)
 
 ---
@@ -15,23 +17,45 @@ Esta es una API RESTful para la gestión de citas médicas desarrollada con **Py
 
 ## Instalación
 
-1. Crear un entorno virtual:
+1. **Clonar el repositorio:**
 
-python3 -m venv env
-source env/bin/activate
-pip install -r requirements.txt
+   git clone https://github.com/michael-urzua-y/centro_medico.git
+   cd centro_medico
 
+2. **Crear un entorno virtual:**
 
-2. Crear la base de datos PostgreSQL (o usar el script 'init_db.sql').
-3. Configurar la URI de conexión en `app/__init__.py`:
+    python3 -m venv env
+    source env/bin/activate
+    pip install -r requirements.txt
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://devuser:devpass@localhost/medic_api'
+3. **Configurar la base de datos:**
+  
+  - Crea una base de datos llamada 'medic_api'.
+  - Ejecuta el script 'init_db.sql' para inicializar las tablas y datos necesarios. 
 
-4. Ejecutar:
+4. **Configurar la URI de conexión en `app/__init__.py`:**
 
-python run.py
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://devuser:devpass@localhost/medic_api'
+
+5. **Ejecutar:**
+
+    python run.py
 
 ---
+
+## Pruebas Unitarias
+
+Para ejecutar las pruebas unitarias:
+
+```bash
+PYTHONPATH=./ pytest -v
+```
+
+Las pruebas se encuentran en la carpeta 'test/' e incluyen casos para:
+
+- Creación de citas
+- Rechazo de citas
+- Autenticación de usuarios
 
 ## Autenticación por token
 
@@ -52,7 +76,7 @@ POST http://localhost:5000/api/auth/login
 
 ---
 
-### 📅 2. POST /api/citas/pedir
+### 2. POST /api/citas/pedir
 Crea una nueva cita (solo para pacientes autenticados).
 POST http://127.0.0.1:5000/api/citas/pedir
 {
@@ -67,8 +91,9 @@ POST http://127.0.0.1:5000/api/citas/pedir
 Registra el pago de una cita. Solo pacientes pueden pagar citas propias.
 POST http://localhost:5000/api/pagos/realizar
 {
-  "cita_id": 2,
-  "monto": 35000
+  "cita_id": 10,
+  "monto": 45000,
+  "payment_method_id": "pm_card_visa"
 }
 
 ---
@@ -120,6 +145,9 @@ http://localhost:5000/api/citas/paciente
 - realizar_pago()
   - Registra el pago de una cita si es del paciente autenticado y está pendiente.
 
+- verificar_pago():
+  - Verifica el estado de un pago
+
 - confirmar_cita()
   - Permite al médico confirmar una cita pagada que le pertenece.
 
@@ -134,5 +162,3 @@ http://localhost:5000/api/citas/paciente
   - Puede filtrar por fecha opcional.
 
 ---
-
-- Tecnologías usadas: Python, Flask, PostgreSQL
