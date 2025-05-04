@@ -37,7 +37,12 @@ Esta es una API RESTful para la gestión de citas médicas desarrollada con **Py
 
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://devuser:devpass@localhost/medic_api'
 
-5. **Ejecutar:**
+5. **Variable de entorno para Token**
+
+  - El archivo '.env.example' renombrarlo a '.env'
+  - Copiar el Stripe Secret Key enviado en el correo
+
+6. **Ejecutar:**
 
     python run.py
 
@@ -98,7 +103,12 @@ POST http://localhost:5000/api/pagos/realizar
 
 ---
 
-### 4. POST /api/citas/confirmar
+### 4. GET http://localhost:5000/api/pagos/verificar/1
+Verifica el estado de un pago, em este caso el numero final 1 corresponde a pago_id
+
+---
+
+### 5. POST /api/citas/confirmar
 Confirma una cita médica (solo médicos pueden confirmar las suyas).
 POST http://localhost:5000/api/citas/confirmar
 
@@ -108,7 +118,7 @@ POST http://localhost:5000/api/citas/confirmar
 
 ---
 
-### 5. POST /api/citas/rechazar
+### 6. POST /api/citas/rechazar
 Permite al médico autenticado rechazar una cita que le pertenece.
 Solo se pueden rechazar citas que estén en estado 'pendiente'.
 POST http://localhost:5000/api/citas/rechazar
@@ -119,7 +129,7 @@ POST http://localhost:5000/api/citas/rechazar
 
 ---
 
-### 6. GET /api/citas/dia?fecha=YYYY-MM-DD
+### 7. GET /api/citas/dia?fecha=YYYY-MM-DD
 Lista las citas del día actual o fecha específica (solo médicos).
 
 GET http://localhost:5000/api/citas/dia?fecha=2025-05-02  / Fecha especifica
@@ -127,7 +137,7 @@ http://localhost:5000/api/citas/dia?medico_id=2  / Fecha hoy
 
 ---
 
-###  6. GET /api/citas/paciente?fecha=YYYY-MM-DD
+###  8. GET /api/citas/paciente?fecha=YYYY-MM-DD
 Muestra el historial de citas de un paciente.
 Puede filtrar por fecha o mostrar todas por defecto.
 

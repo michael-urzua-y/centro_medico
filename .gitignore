@@ -45,7 +45,6 @@ Thumbs.db
 
 # Env variables
 .env
-.env.*
 
 # Pip dependency file
 pip-log.txt
