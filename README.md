@@ -1,174 +1,175 @@
-# API RESTful - Centro Médico
+# 🏥 API RESTful - Centro Médico
 
-Esta es una API RESTful para la gestión de citas médicas desarrollada con **Python (Flask)** y **PostgreSQL**
+API RESTful para la gestión de citas médicas desarrollada con **Python (Flask)** y **PostgreSQL**.
+
 ---
 
-## Tecnologías utilizadas
+## 🚀 Tecnologías Utilizadas
 
-- Python 3
-- Flask
-- Flask SQLAlchemy
-- PostgreSQL
-- pytest
+- Python 3  
+- Flask  
+- Flask SQLAlchemy  
+- PostgreSQL  
+- Pytest  
 - Postman (para pruebas)
 
 ---
 
+## ⚙️ Instalación
 
-## Instalación
-
-1. **Clonar el repositorio:**
-
-   git clone https://github.com/michael-urzua-y/centro_medico.git
-   cd centro_medico
+1. **Clonar el repositorio o descomprimir .zip del correo:**
+```bash
+git clone https://github.com/michael-urzua-y/centro_medico.git
+cd centro_medico
+```
 
 2. **Crear un entorno virtual:**
-
-    python3 -m venv env
-    source env/bin/activate
-    pip install -r requirements.txt
+```bash
+python3 -m venv env
+source env/bin/activate
+pip install -r requirements.txt
+```
 
 3. **Configurar la base de datos:**
-  
-  - Crea una base de datos llamada 'medic_api'.
-  - Ejecuta el script 'init_db.sql' para inicializar las tablas y datos necesarios. 
 
-4. **Configurar la URI de conexión en `app/__init__.py`:**
+- Crear una base de datos llamada 'medic_api'.
+- Ejecutar el script 'init_db.sql' para crear las tablas necesarias.
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://devuser:devpass@localhost/medic_api'
+4. **Actualizar la URI de conexión en 'app/__init__.py':**
+```python
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://devuser:devpass@localhost/medic_api'
+```
 
-5. **Variable de entorno para Token**
+5. **Configurar variables de entorno:**
 
-  - El archivo '.env.example' renombrarlo a '.env'
-  - Copiar el Stripe Secret Key enviado en el correo
+- Renombrar '.env.example' a '.env'.
+- Copiar y pegar la Stripe Secret Key proporcionada el correo.
 
-6. **Ejecutar:**
-
-    python run.py
+6. **Ejecutar la aplicación:**
+```bash
+python run.py
+```
 
 ---
 
-## Pruebas Unitarias
+## ✅ Pruebas Unitarias
 
-Para ejecutar las pruebas unitarias:
-
+Para ejecutar los tests:
 ```bash
 PYTHONPATH=./ pytest -v
 ```
 
-Las pruebas se encuentran en la carpeta 'test/' e incluyen casos para:
+Las pruebas están en 'test/' e incluyen:
 
-- Creación de citas
-- Rechazo de citas
-- Autenticación de usuarios
-
-## Autenticación por token
-
-- Usar '/api/auth/login' para obtener un token.
-- En las demás rutas, enviar el token en el header:
+- Solo creación de cita (test_nueva_cita_creada)
+- Creación + Pago (test_pago_exitoso)
+- Creación + Pago + Confirmación (test_confirmar_cita)
+- Creación + Rechazo (test_rechazar_cita_pendiente - descomentar para usar)
 
 ---
 
-## Endpoints disponibles
+## 🔐 Autenticación
 
-### 1. POST /api/auth/login
-Inicia sesión y retorna un token.
-POST http://localhost:5000/api/auth/login
+- Realiza login en '/api/auth/login' para obtener un token JWT.
+- En las demás rutas protegidas, añade el token en el encabezado:
+
+---
+
+## 📌 Endpoints Principales
+
+### 1. Iniciar Sesión
+**POST** '/api/auth/login'
+```json
 {
   "email": "usuario@ejemplo.com",
   "password": "1234"
 }
+```
 
 ---
 
-### 2. POST /api/citas/pedir
-Crea una nueva cita (solo para pacientes autenticados).
-POST http://127.0.0.1:5000/api/citas/pedir
+### 2. Pedir Cita
+**POST** '/api/citas/pedir'
+  - Crea una nueva cita (solo para pacientes autenticados).
+
+```json
 {
   "medico_id": 2,
   "fecha": "2025-05-02",
   "hora": "10:00"
 }
+```
 
 ---
 
-### 3. POST /api/pagos/realizar
-Registra el pago de una cita. Solo pacientes pueden pagar citas propias.
-POST http://localhost:5000/api/pagos/realizar
+### 3. Realizar Pago
+**POST** '/api/pagos/realizar'
+  - Registra el pago de una cita.
+  - Solo pacientes pueden pagar citas propias.
+
+```json
 {
   "cita_id": 10,
   "monto": 45000,
   "payment_method_id": "pm_card_visa"
 }
+```
 
 ---
 
-### 4. GET http://localhost:5000/api/pagos/verificar/1
-Verifica el estado de un pago, em este caso el numero final 1 corresponde a pago_id
+### 4. Verificar Pago
+**GET** '/api/pagos/verificar/1'
+  - Verifica el estado de un pago, en este caso el numero final 1 corresponde a pago_id
 
 ---
 
-### 5. POST /api/citas/confirmar
-Confirma una cita médica (solo médicos pueden confirmar las suyas).
-POST http://localhost:5000/api/citas/confirmar
-
+### 5. Confirmar Cita (Médico)
+**POST** '/api/citas/confirmar'
+  - Confirma una cita médica (solo médicos pueden confirmar las suyas).
+```json
 {
   "cita_id": 2
 }
+```
 
 ---
 
-### 6. POST /api/citas/rechazar
-Permite al médico autenticado rechazar una cita que le pertenece.
-Solo se pueden rechazar citas que estén en estado 'pendiente'.
-POST http://localhost:5000/api/citas/rechazar
-
+### 6. Rechazar Cita (Médico)
+**POST** '/api/citas/rechazar'
+  - Permite al médico autenticado rechazar una cita que le pertenece.
+  - Solo se pueden rechazar citas que estén en estado 'pendiente'.
+```json
 {
   "cita_id": 2
 }
+```
 
 ---
 
-### 7. GET /api/citas/dia?fecha=YYYY-MM-DD
-Lista las citas del día actual o fecha específica (solo médicos).
-
-GET http://localhost:5000/api/citas/dia?fecha=2025-05-02  / Fecha especifica
-http://localhost:5000/api/citas/dia?medico_id=2  / Fecha hoy
-
----
-
-###  8. GET /api/citas/paciente?fecha=YYYY-MM-DD
-Muestra el historial de citas de un paciente.
-Puede filtrar por fecha o mostrar todas por defecto.
-
-GET http://localhost:5000/api/citas/paciente?fecha=2025-05-02
-http://localhost:5000/api/citas/paciente
+### 7. Listar Citas del Día
+**GET** '/api/citas/dia?fecha=2025-05-02'  
+**GET** '/api/citas/dia?medico_id=2'
+  - Lista las citas del día actual o fecha específica (solo médicos).
 
 ---
 
-## Descripción de funciones clave (documentación interna)
-
-- pedir_cita()
-  - Permite a un paciente agendar una nueva cita.
-  - Valida horario, fecha y que no esté ocupada.
-
-- realizar_pago()
-  - Registra el pago de una cita si es del paciente autenticado y está pendiente.
-
-- verificar_pago():
-  - Verifica el estado de un pago
-
-- confirmar_cita()
-  - Permite al médico confirmar una cita pagada que le pertenece.
-
-- rechazar_cita()
-  - Esta función permite a un médico autenticado rechazar una cita que está asignada a él, siempre que la cita esté en estado "pendiente".
-
-- citas_del_dia()
-  - Muestra todas las citas del día (o fecha específica) para el médico autenticado.
-
-- citas_por_paciente()
-  - Lista el historial de citas del paciente autenticado.
-  - Puede filtrar por fecha opcional.
+### 8. Historial del Paciente
+**GET** '/api/citas/paciente?fecha=2025-05-02'  
+**GET** '/api/citas/paciente'
+  - Muestra el historial de citas de un paciente.
+  - Puede filtrar por fecha o mostrar todas por defecto.
 
 ---
+
+## 🧠 Funciones Clave
+
+- **'pedir_cita()'**: Agenda una nueva cita validando fecha y disponibilidad.  
+- **'realizar_pago()'**: Registra el pago de la cita pendiente del paciente autenticado.  
+- **'verificar_pago()'**: Consulta el estado actual de un pago.  
+- **'confirmar_cita()'**: Permite al médico confirmar citas pagadas que le corresponden.  
+- **'rechazar_cita()'**: Permite al médico rechazar citas pendientes que le corresponden.  
+- **'citas_del_dia()'**: Lista las citas del día o una fecha específica del médico autenticado.  
+- **'citas_por_paciente()'**: Historial de citas del paciente autenticado, opcionalmente filtrado por fecha.
+
+---
+
