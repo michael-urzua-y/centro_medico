@@ -132,8 +132,10 @@ def realizar_pago():
 @token_required
 def verificar_pago(pago_id):
     # Verifica el estado de un pago
-    
-    pago = Pago.query.options(db.joinedload(Pago.cita)).get_or_404(pago_id)
+    try:
+        pago = Pago.query.options(db.joinedload(Pago.cita)).get_or_404(pago_id)
+    except:
+        return jsonify({"error": f"No existe un pago con cita_id {pago_id}"}), 404 
     
     # Verificar que el pago pertenece al paciente
     if not pago.cita or pago.cita.paciente_id != request.usuario_actual.usuario_id:
