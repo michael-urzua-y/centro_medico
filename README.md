@@ -2,6 +2,7 @@
 
 API RESTful para la gestión de citas médicas desarrollada con **Python (Flask)** y **PostgreSQL**.
 
+**Workflow Postman en archivo postman_workflow_api_medica.md**
 ---
 
 ## 🚀 Tecnologías Utilizadas
